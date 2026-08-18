@@ -1,0 +1,3 @@
+module CalendarBarPackageTests {
+    header "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/include/CalendarBarPackageTests-Swift.h"
+}

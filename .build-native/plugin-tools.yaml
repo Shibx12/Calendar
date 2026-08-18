@@ -1,0 +1,131 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "CalendarBar-arm64-apple-macosx-release.exe": ["<CalendarBar-arm64-apple-macosx-release.exe>"]
+  "CalendarBar-arm64-apple-macosx-release.module": ["<CalendarBar-arm64-apple-macosx-release.module>"]
+  "CalendarBarPackageTests-arm64-apple-macosx-release.module": ["<CalendarBarPackageTests-arm64-apple-macosx-release.module>"]
+  "CalendarBarPackageTests-arm64-apple-macosx-release.test": ["<CalendarBarPackageTests-arm64-apple-macosx-release.test>"]
+  "CalendarBarTests-arm64-apple-macosx-release.module": ["<CalendarBarTests-arm64-apple-macosx-release.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<CalendarBar-arm64-apple-macosx-release.exe>","<CalendarBar-arm64-apple-macosx-release.module>"]
+  "test": ["<CalendarBar-arm64-apple-macosx-release.exe>","<CalendarBar-arm64-apple-macosx-release.module>","<CalendarBarPackageTests-arm64-apple-macosx-release.test>","<CalendarBarTests-arm64-apple-macosx-release.module>"]
+default: "main"
+nodes:
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/benjamin/Github/Calendar/Tests/CalendarBarTests/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+commands:
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/benjamin/Github/Calendar/Sources/CalendarBar/AppDelegate.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarBarApp.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarPopoverView.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarService.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/Models.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/Preferences.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/SettingsView.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/VisualEffectView.swift"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/sources"]
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/sources"
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.product/Objects.LinkFileList"
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.derived/runner.swift"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/sources"]
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/sources"
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.derived/runner.swift":
+    tool: test-entry-point-tool
+    inputs: []
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.derived/runner.swift"]
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swift.o"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.product/Objects.LinkFileList"
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/benjamin/Github/Calendar/Tests/CalendarBarTests/TimelineFormatterTests.swift"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/sources"]
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/sources"
+
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt"
+
+  "<CalendarBar-arm64-apple-macosx-release.exe>":
+    tool: phony
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar"]
+    outputs: ["<CalendarBar-arm64-apple-macosx-release.exe>"]
+
+  "<CalendarBar-arm64-apple-macosx-release.module>":
+    tool: phony
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBar.swiftmodule"]
+    outputs: ["<CalendarBar-arm64-apple-macosx-release.module>"]
+
+  "<CalendarBarPackageTests-arm64-apple-macosx-release.module>":
+    tool: phony
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarPackageTests.swiftmodule"]
+    outputs: ["<CalendarBarPackageTests-arm64-apple-macosx-release.module>"]
+
+  "<CalendarBarPackageTests-arm64-apple-macosx-release.test>":
+    tool: phony
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.xctest/Contents/MacOS/CalendarBarPackageTests"]
+    outputs: ["<CalendarBarPackageTests-arm64-apple-macosx-release.test>"]
+
+  "<CalendarBarTests-arm64-apple-macosx-release.module>":
+    tool: phony
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarTests.swiftmodule"]
+    outputs: ["<CalendarBarTests-arm64-apple-macosx-release.module>"]
+
+  "C.CalendarBar-arm64-apple-macosx-release.exe":
+    tool: shell
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.product/Objects.LinkFileList"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar"]
+    description: "Linking ./.build-native/arm64-apple-macosx/release/CalendarBar"
+    args: ["/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release","-o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar","-module-name","CalendarBar","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-dead_strip","-Xlinker","-alias","-Xlinker","_CalendarBar_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx13.0","-Xlinker","-dead_strip","-plugin-path","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-F","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-gnone"]
+
+  "C.CalendarBar-arm64-apple-macosx-release.module":
+    tool: shell
+    inputs: ["/Users/benjamin/Github/Calendar/Sources/CalendarBar/AppDelegate.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarBarApp.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarPopoverView.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarService.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/Models.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/Preferences.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/SettingsView.swift","/Users/benjamin/Github/Calendar/Sources/CalendarBar/VisualEffectView.swift","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/sources"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBar.swiftmodule"]
+    description: "Compiling Swift Module 'CalendarBar' (8 sources)"
+    args: ["/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","CalendarBar","-emit-dependencies","-emit-module","-emit-module-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBar.swiftmodule","-output-file-map","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/output-file-map.json","-whole-module-optimization","-num-threads","12","-c","@/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/sources","-I","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx13.0","-whole-module-optimization","-num-threads","12","-serialize-diagnostics","-O","-j12","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","CalendarBar_main","-swift-version","5","-Osize","-gnone","-plugin-path","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-F","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-gnone","-Xcc","-isysroot","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-Xcc","-F","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g0","-package-name","calendar"]
+
+  "C.CalendarBarPackageTests-arm64-apple-macosx-release.module":
+    tool: shell
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.derived/runner.swift","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarTests.swiftmodule","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/sources"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarPackageTests.swiftmodule"]
+    description: "Compiling Swift Module 'CalendarBarPackageTests' (1 sources)"
+    args: ["/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","CalendarBarPackageTests","-emit-dependencies","-emit-module","-emit-module-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarPackageTests.swiftmodule","-output-file-map","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/output-file-map.json","-parse-as-library","-whole-module-optimization","-num-threads","12","-c","@/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/sources","-I","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx13.0","-whole-module-optimization","-num-threads","12","-serialize-diagnostics","-O","-enable-testing","-Xfrontend","-enable-cross-import-overlays","-j12","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/ModuleCache","-parseable-output","-parse-as-library","-emit-objc-header","-emit-objc-header-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/include/CalendarBarPackageTests-Swift.h","-plugin-path","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-F","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-gnone","-Xcc","-isysroot","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-Xcc","-F","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g0","-package-name","calendar"]
+
+  "C.CalendarBarPackageTests-arm64-apple-macosx-release.test":
+    tool: shell
+    inputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.product/Objects.LinkFileList"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.xctest/Contents/MacOS/CalendarBarPackageTests"]
+    description: "Linking ./.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.xctest/Contents/MacOS/CalendarBarPackageTests"
+    args: ["/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-L","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release","-o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.xctest/Contents/MacOS/CalendarBarPackageTests","-module-name","CalendarBarPackageTests","-Xlinker","-no_warn_duplicate_libraries","-Xlinker","-bundle","-Xlinker","-dead_strip","-Xlinker","-rpath","-Xlinker","@loader_path/../../../","@/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.product/Objects.LinkFileList","-Xlinker","-rpath","-Xlinker","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift-6.2/macosx","-target","arm64-apple-macosx14.0","-Xlinker","-dead_strip","-plugin-path","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-F","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-gnone"]
+
+  "C.CalendarBarTests-arm64-apple-macosx-release.module":
+    tool: shell
+    inputs: ["/Users/benjamin/Github/Calendar/Tests/CalendarBarTests/TimelineFormatterTests.swift","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/swift-version-39B54973F684ADAB.txt","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/sources"]
+    outputs: ["/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swift.o","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarTests.swiftmodule"]
+    description: "Compiling Swift Module 'CalendarBarTests' (1 sources)"
+    args: ["/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc","-module-name","CalendarBarTests","-emit-dependencies","-emit-module","-emit-module-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules/CalendarBarTests.swiftmodule","-output-file-map","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/output-file-map.json","-parse-as-library","-whole-module-optimization","-num-threads","12","-c","@/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/sources","-I","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/Modules","-target","arm64-apple-macosx14.0","-whole-module-optimization","-num-threads","12","-serialize-diagnostics","-index-store-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/index/store","-O","-enable-testing","-Xfrontend","-enable-cross-import-overlays","-j12","-DSWIFT_PACKAGE","-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE","-module-cache-path","/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/ModuleCache","-parseable-output","-parse-as-library","-swift-version","5","-plugin-path","/Applications/Xcode-beta.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/host/plugins/testing","-sdk","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-F","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-I","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-L","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/usr/lib","-gnone","-Xcc","-isysroot","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX27.0.sdk","-Xcc","-F","-Xcc","/Applications/Xcode-beta.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks","-Xcc","-fPIC","-Xcc","-g0","-package-name","calendar"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/benjamin/Github/Calendar/Sources/CalendarBar/","/Users/benjamin/Github/Calendar/Tests/CalendarBarTests/","/Users/benjamin/Github/Calendar/Package.swift","/Users/benjamin/Github/Calendar/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

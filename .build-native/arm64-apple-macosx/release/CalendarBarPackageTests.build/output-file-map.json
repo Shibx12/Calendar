@@ -1,0 +1,12 @@
+{
+  "": {
+    "dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/CalendarBarPackageTests.d",
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/CalendarBarPackageTests.o",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/primary.swiftdeps"
+  },
+  "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.derived/runner.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarPackageTests.build/runner.dia"  }
+}

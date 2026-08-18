@@ -1,0 +1,12 @@
+{
+  "": {
+    "dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/CalendarBarTests.d",
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/CalendarBarTests.o",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/primary.swiftdeps"
+  },
+  "/Users/benjamin/Github/Calendar/Tests/CalendarBarTests/TimelineFormatterTests.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBarTests.build/TimelineFormatterTests.dia"  }
+}

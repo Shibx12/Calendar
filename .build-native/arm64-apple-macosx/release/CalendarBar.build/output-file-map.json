@@ -1,0 +1,47 @@
+{
+  "": {
+    "dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBar.d",
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBar.o",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/primary.swiftdeps"
+  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/AppDelegate.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/AppDelegate.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarBarApp.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarBarApp.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarPopoverView.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarPopoverView.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/CalendarService.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/CalendarService.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/Models.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Models.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/Preferences.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/Preferences.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/SettingsView.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/SettingsView.dia"  },
+  "/Users/benjamin/Github/Calendar/Sources/CalendarBar/VisualEffectView.swift": {
+    "object": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swift.o",
+    "swiftmodule": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView~partial.swiftmodule",
+    "swift-dependencies": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.swiftdeps",
+    "diagnostics": "/Users/benjamin/Github/Calendar/.build-native/arm64-apple-macosx/release/CalendarBar.build/VisualEffectView.dia"  }
+}
