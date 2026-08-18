@@ -20,7 +20,7 @@ private final class ReminderIslandPanel: NSPanel {
 }
 
 private struct TopAttachedIslandShape: Shape {
-    var radius: CGFloat = 24
+    var radius: CGFloat = 16
     var collapseProgress: CGFloat = 0
     var collapsedWidth: CGFloat = 1
     var collapsedHeight: CGFloat = 1
@@ -71,7 +71,7 @@ private struct ReminderIslandView: View {
     var body: some View {
         ZStack {
             TopAttachedIslandShape(
-                radius: 24,
+                radius: 16,
                 collapseProgress: model.swipeProgress,
                 collapsedWidth: model.collapsedWidth,
                 collapsedHeight: model.collapsedHeight,
@@ -253,9 +253,8 @@ final class ReminderIslandController {
         stopSwipeMonitoring()
 
         let remainingProgress = max(0, 1 - model.swipeProgress)
-        let duration = max(0.16, 0.46 * Double(remainingProgress))
-        // Exact temporal reverse of the opening curve (0.2, 0.82, 0.24, 1).
-        withAnimation(.timingCurve(0.76, 0, 0.8, 0.18, duration: duration)) {
+        let duration = max(0.14, 0.40 * Double(remainingProgress))
+        withAnimation(.timingCurve(0.22, 0.78, 0.24, 1, duration: duration)) {
             model.swipeProgress = 1
         }
 
