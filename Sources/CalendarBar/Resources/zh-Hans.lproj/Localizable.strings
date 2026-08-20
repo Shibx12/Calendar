@@ -1,0 +1,62 @@
+"permission.title" = "让日程出现在菜单栏";
+"permission.detail" = "CalendarBar 只在本机读取你选择的日历，不会上传任何数据。";
+"permission.allow" = "允许访问日历";
+"permission.denied_title" = "日历访问已关闭";
+"permission.denied_detail" = "请在“系统设置 → 隐私与安全性 → 日历”中允许 CalendarBar。";
+"permission.open_settings" = "打开系统设置";
+
+"action.refresh_calendar" = "刷新日历";
+"action.settings" = "设置";
+"action.quit" = "退出 CalendarBar";
+"action.open_in_calendar" = "在 Apple 日历中打开";
+
+"navigation.page_control" = "页面选择器";
+"navigation.calendar_page" = "日历页面";
+"navigation.settings_page" = "设置页面";
+"navigation.swipe_hint" = "左右滑动以切换页面";
+
+"day.today" = "今天";
+"day.tomorrow" = "明天";
+"event.all_day" = "全天";
+"event.untitled" = "未命名日程";
+"event.active_suffix" = "，正在进行";
+"event.location_suffix" = "，地点 %@";
+"event.accessibility_format" = "%1$@%2$@，%3$@%4$@";
+
+"settings.test_reminder" = "测试提醒岛";
+"settings.calendars" = "日历";
+"settings.select_all" = "全选";
+"settings.selected" = "已选择";
+"settings.not_selected" = "未选择";
+"settings.display" = "显示";
+"settings.appearance" = "外观";
+"settings.language" = "语言";
+"settings.future_event_range" = "未来事件范围";
+"settings.hours" = "小时";
+"settings.show_next_event" = "下个事件同时显示";
+"settings.show_current_event" = "显示当前事件";
+"settings.system" = "系统";
+"settings.launch_at_login" = "登录时启动";
+
+"appearance.system" = "跟随系统";
+"appearance.light" = "浅色";
+"appearance.dark" = "深色";
+
+"language.system" = "跟随系统";
+"language.english" = "English";
+"language.simplified_chinese" = "简体中文";
+
+"status.calendar_access" = "日历访问";
+"status.free" = "空闲";
+"status.free_tooltip" = "未来 %lld 小时没有日程";
+
+"duration.now" = "现在";
+"duration.minutes" = "%lld分钟";
+"duration.hours" = "%lld小时";
+"duration.hours_minutes" = "%1$lld小时 %2$lld分钟";
+"event.remaining_format" = "%1$@ 剩余 %2$@";
+"event.upcoming_format" = "%1$@ %2$@后";
+"reminder.remaining_format" = "剩余 %@";
+
+"preview.title" = "CalendarBar 提醒测试";
+"preview.calendar" = "测试";

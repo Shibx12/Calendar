@@ -3,6 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "CalendarBar",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v13)
     ],
@@ -13,6 +14,9 @@ let package = Package(
         .executableTarget(
             name: "CalendarBar",
             path: "Sources/CalendarBar",
+            resources: [
+                .process("Resources")
+            ],
             swiftSettings: [
                 .unsafeFlags(["-Osize", "-gnone"], .when(configuration: .release))
             ],

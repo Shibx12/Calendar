@@ -31,4 +31,37 @@ final class TimelineFormatterTests: XCTestCase {
         XCTAssertEqual(TimelineFormatter.menuBarDuration(121 * 60, usesPlural: true), "2h 1m")
         XCTAssertEqual(TimelineFormatter.menuBarDuration(120 * 60, usesPlural: true), "2h")
     }
+
+    func testAllDayMenuBarLabelUsesOnlyItsTitle() {
+        let now = Date(timeIntervalSince1970: 2_000_000_000)
+        let event = CalendarEvent(
+            id: "all-day",
+            title: "全天计划",
+            startDate: now.addingTimeInterval(-8 * 3_600),
+            endDate: now.addingTimeInterval(16 * 3_600),
+            isAllDay: true
+        )
+
+        XCTAssertEqual(TimelineFormatter.relativeLabel(for: event, now: now), "全天计划")
+    }
+
+    func testStatusUpdatePlannerUsesNextVisibleMinuteBoundary() {
+        let now = Date(timeIntervalSince1970: 2_000_000_000)
+        let event = CalendarEvent(
+            id: "upcoming",
+            title: "散步",
+            startDate: now.addingTimeInterval(87 * 60 + 20),
+            endDate: now.addingTimeInterval(2 * 3_600)
+        )
+
+        let nextDate = StatusUpdatePlanner.nextUpdateDate(
+            events: [event],
+            menuEvents: [event],
+            now: now,
+            lookAheadHours: 24,
+            upcomingWhileCurrentHours: 5
+        )
+
+        XCTAssertEqual(nextDate, now.addingTimeInterval(20))
+    }
 }

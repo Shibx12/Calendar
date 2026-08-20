@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "CalendarBar";
+"NSCalendarsUsageDescription" = "CalendarBar 需要读取日历，以在菜单栏显示即将到来的日程。";
+"NSCalendarsFullAccessUsageDescription" = "CalendarBar 需要读取日历，以在菜单栏显示即将到来的日程。";
+"NSFocusStatusUsageDescription" = "CalendarBar 需要读取专注模式状态，以便在勿扰或其他专注模式开启时暂停提醒岛。";

@@ -57,12 +57,30 @@ final class ReminderScheduler {
         timer = nil
     }
 
-    static func makeMoments(events: [CalendarEvent]) -> [ScheduledReminder] {
+    static func makeMoments(
+        events: [CalendarEvent],
+        calendar: Calendar = .autoupdatingCurrent
+    ) -> [ScheduledReminder] {
         events.flatMap { event -> [ScheduledReminder] in
-            let automaticDates = [
-                event.startDate.addingTimeInterval(-10 * 60),
-                event.startDate.addingTimeInterval(-5 * 60)
-            ]
+            let automaticDates: [Date]
+            if event.isAllDay {
+                let previousDay = calendar.date(
+                    byAdding: .day,
+                    value: -1,
+                    to: event.startDate
+                ) ?? event.startDate.addingTimeInterval(-86_400)
+                automaticDates = calendar.date(
+                    bySettingHour: 21,
+                    minute: 0,
+                    second: 0,
+                    of: previousDay
+                ).map { [$0] } ?? []
+            } else {
+                automaticDates = [
+                    event.startDate.addingTimeInterval(-10 * 60),
+                    event.startDate.addingTimeInterval(-5 * 60)
+                ]
+            }
             let allDates = event.calendarAlarmDates + automaticDates
             var seenSeconds = Set<Int64>()
 
@@ -116,13 +134,19 @@ final class ReminderScheduler {
             .min()
         guard let nextDate else { return }
 
-        let interval = max(1, min(60, nextDate.timeIntervalSince(now)))
+        // Sleep directly until the next reminder. Waking once a minute for an
+        // event that is hours away wastes energy and does not improve accuracy.
+        let interval = Self.nextCheckInterval(nextDate: nextDate, now: now)
         let timer = Timer(timeInterval: interval, repeats: false) { [weak self] _ in
             Task { @MainActor in self?.checkDueReminders() }
         }
-        timer.tolerance = min(2, interval * 0.1)
+        timer.tolerance = min(5, max(0.25, interval * 0.01))
         RunLoop.main.add(timer, forMode: .common)
         self.timer = timer
+    }
+
+    static func nextCheckInterval(nextDate: Date, now: Date) -> TimeInterval {
+        max(1, nextDate.timeIntervalSince(now))
     }
 
     private func pruneHistory(now: Date) {

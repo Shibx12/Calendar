@@ -6,11 +6,10 @@ import SwiftUI
 private final class ReminderIslandModel: ObservableObject {
     @Published var reminder: ScheduledReminder?
     @Published var topInset: CGFloat = 32
-    @Published var contentVisible = false
-    @Published var swipeProgress: CGFloat = 0
-    @Published var collapsedWidth: CGFloat = 1
-    @Published var collapsedHeight: CGFloat = 1
-    @Published var collapseCenterY: CGFloat = 16
+    @Published var seedCenterY: CGFloat = 16
+    @Published var surfaceWidthProgress: CGFloat = 0
+    @Published var surfaceHeightProgress: CGFloat = 0
+    @Published var contentProgress: CGFloat = 0
 }
 
 @MainActor
@@ -19,49 +18,60 @@ private final class ReminderIslandPanel: NSPanel {
     override var canBecomeMain: Bool { false }
 }
 
-private struct TopAttachedIslandShape: Shape {
-    var radius: CGFloat = 16
-    var collapseProgress: CGFloat = 0
-    var collapsedWidth: CGFloat = 1
-    var collapsedHeight: CGFloat = 1
-    var collapseCenterY: CGFloat = 16
+enum ReminderIslandLayout {
+    static let horizontalMargin: CGFloat = 25
 
-    var animatableData: CGFloat {
-        get { collapseProgress }
-        set { collapseProgress = newValue }
+    static func expandedWidth(
+        contentWidth: CGFloat,
+        minimumWidth: CGFloat,
+        maximumWidth: CGFloat
+    ) -> CGFloat {
+        min(
+            max(minimumWidth, ceil(contentWidth + 2 * horizontalMargin)),
+            maximumWidth
+        )
+    }
+}
+
+/// A top-attached, continuous-corner surface that grows from the visual
+/// center of the MacBook notch without resizing its host window.
+private struct IslandSurfaceShape: Shape {
+    var widthProgress: CGFloat
+    var heightProgress: CGFloat
+    var seedCenterY: CGFloat
+    var expandedCornerRadius: CGFloat = 16
+
+    var animatableData: AnimatablePair<CGFloat, CGFloat> {
+        get { AnimatablePair(widthProgress, heightProgress) }
+        set {
+            widthProgress = newValue.first
+            heightProgress = newValue.second
+        }
     }
 
     func path(in rect: CGRect) -> Path {
-        let progress = min(max(collapseProgress, 0), 1)
-        let targetWidth = min(collapsedWidth, rect.width)
-        let targetHeight = min(collapsedHeight, rect.height)
-        let width = rect.width + (targetWidth - rect.width) * progress
-        let height = rect.height + (targetHeight - rect.height) * progress
-        let targetY = min(max(0, collapseCenterY - targetHeight / 2), rect.maxY)
-        let y = rect.minY + (targetY - rect.minY) * progress
+        let horizontal = min(max(widthProgress, 0), 1)
+        let vertical = min(max(heightProgress, 0), 1)
+        let seedSize: CGFloat = 1
+
+        let width = seedSize + (rect.width - seedSize) * horizontal
+        // Extending the continuous rounded rectangle above the window leaves
+        // its top edge flush with the display while retaining continuous
+        // curvature on the two visible lower corners.
+        let expandedTop = -expandedCornerRadius
+        let expandedHeight = rect.height + expandedCornerRadius
+        let height = seedSize + (expandedHeight - seedSize) * vertical
+        let seedTop = seedCenterY - seedSize / 2
+        let top = seedTop + (expandedTop - seedTop) * vertical
         let shapeRect = CGRect(
             x: rect.midX - width / 2,
-            y: y,
+            y: top,
             width: width,
             height: height
         )
-        let r = min(radius, min(shapeRect.width, shapeRect.height) / 2)
-        let overdraw: CGFloat = 1
-        var path = Path()
-        path.move(to: CGPoint(x: shapeRect.minX - overdraw, y: shapeRect.minY - overdraw))
-        path.addLine(to: CGPoint(x: shapeRect.maxX + overdraw, y: shapeRect.minY - overdraw))
-        path.addLine(to: CGPoint(x: shapeRect.maxX + overdraw, y: shapeRect.maxY - r))
-        path.addQuadCurve(
-            to: CGPoint(x: shapeRect.maxX - r, y: shapeRect.maxY),
-            control: CGPoint(x: shapeRect.maxX + overdraw, y: shapeRect.maxY)
-        )
-        path.addLine(to: CGPoint(x: shapeRect.minX + r, y: shapeRect.maxY))
-        path.addQuadCurve(
-            to: CGPoint(x: shapeRect.minX - overdraw, y: shapeRect.maxY - r),
-            control: CGPoint(x: shapeRect.minX - overdraw, y: shapeRect.maxY)
-        )
-        path.closeSubpath()
-        return path
+        let cornerRadius = min(expandedCornerRadius, min(width, height) / 2)
+        return RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+            .path(in: shapeRect)
     }
 }
 
@@ -69,64 +79,58 @@ private struct ReminderIslandView: View {
     @ObservedObject var model: ReminderIslandModel
 
     var body: some View {
-        ZStack {
-            TopAttachedIslandShape(
-                radius: 16,
-                collapseProgress: model.swipeProgress,
-                collapsedWidth: model.collapsedWidth,
-                collapsedHeight: model.collapsedHeight,
-                collapseCenterY: model.collapseCenterY
+        ZStack(alignment: .top) {
+            IslandSurfaceShape(
+                widthProgress: model.surfaceWidthProgress,
+                heightProgress: model.surfaceHeightProgress,
+                seedCenterY: model.seedCenterY
             )
-                .fill(Color.black)
+            .fill(Color.black)
 
             if let reminder = model.reminder {
-                VStack(alignment: .center, spacing: 8) {
-                    HStack(spacing: 6) {
-                        Text(reminderRelativeText(reminder))
-                            .foregroundStyle(.white.opacity(0.58))
-                        Text("•")
-                            .foregroundStyle(.white.opacity(0.32))
-                        Text(reminder.event.startDate.formatted(date: .omitted, time: .shortened))
-                            .foregroundStyle(.white.opacity(0.58))
-                        Text("•")
-                            .foregroundStyle(.white.opacity(0.32))
-                        Text(reminder.event.calendarTitle)
-                            .foregroundStyle(.white.opacity(0.58))
-                            .lineLimit(1)
-                    }
-                    .font(.system(size: 11, weight: .regular))
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(Color(nsColor: reminder.event.calendarColor))
+                        .frame(width: 8, height: 8)
 
-                    HStack(spacing: 8) {
-                        Circle()
-                            .fill(Color(nsColor: reminder.event.calendarColor))
-                            .frame(width: 8, height: 8)
+                    Text(reminder.event.title)
+                        .lineLimit(1)
 
-                        Text(reminder.event.title)
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
-                            .multilineTextAlignment(.center)
-                    }
+                    Text("•")
+
+                    Text(reminderRelativeText(reminder))
+                        .lineLimit(1)
                 }
+                .font(.body)
+                .foregroundStyle(.white.opacity(0.68))
+                .padding(.horizontal, ReminderIslandLayout.horizontalMargin)
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.top, model.topInset + 2)
                 .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-                .opacity(model.contentVisible ? max(0, 1 - model.swipeProgress * 1.8) : 0)
-                .offset(y: model.contentVisible ? -6 * model.swipeProgress : -4)
-                .animation(.easeOut(duration: 0.2), value: model.contentVisible)
+                .opacity(Double(model.contentProgress))
+                .scaleEffect(0.97 + 0.03 * model.contentProgress, anchor: .top)
+                .offset(y: -4 * (1 - model.contentProgress))
             }
         }
         .background(Color.clear)
     }
-
 }
 
 private func reminderRelativeText(_ reminder: ScheduledReminder, now: Date = Date()) -> String {
     if reminder.event.startDate <= now, reminder.event.endDate > now {
-        return "\(TimelineFormatter.menuBarDuration(reminder.event.endDate.timeIntervalSince(now), usesPlural: true)) left"
+        return L10n.format(
+            "reminder.remaining_format",
+            TimelineFormatter.menuBarDuration(
+                reminder.event.endDate.timeIntervalSince(now),
+                usesPlural: true
+            )
+        )
     }
-    return "in \(TimelineFormatter.menuBarDuration(reminder.event.startDate.timeIntervalSince(now), usesPlural: false))"
+    return TimelineFormatter.menuBarDuration(
+        reminder.event.startDate.timeIntervalSince(now),
+        usesPlural: false
+    )
 }
 
 @MainActor
@@ -138,12 +142,11 @@ final class ReminderIslandController {
         backing: .buffered,
         defer: false
     )
+
     private var queue: [ScheduledReminder] = []
     private var current: ScheduledReminder?
     private var hideTask: Task<Void, Never>?
-    private var dismissTask: Task<Void, Never>?
-    private var collapsedFrame = NSRect.zero
-    private var expandedFrame = NSRect.zero
+    private var transitionTask: Task<Void, Never>?
     private var swipeMonitor: Any?
     private var swipeDistance: CGFloat = 0
     private var isDismissing = false
@@ -163,30 +166,32 @@ final class ReminderIslandController {
 
     func dismissImmediately() {
         hideTask?.cancel()
+        transitionTask?.cancel()
         hideTask = nil
-        dismissTask?.cancel()
-        dismissTask = nil
+        transitionTask = nil
         queue.removeAll()
         current = nil
         isDismissing = false
         stopSwipeMonitoring()
         panel.orderOut(nil)
+        resetPresentation()
     }
 
     private func configurePanel() {
         panel.isReleasedWhenClosed = false
         panel.isFloatingPanel = true
         panel.level = NSWindow.Level(rawValue: NSWindow.Level.statusBar.rawValue + 2)
-        panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
+        // The panel is created while the app launches, usually on Desktop 1.
+        // Move it to whichever Space is active when a reminder is presented
+        // instead of relying on a window created on Desktop 1 to join Spaces.
+        panel.collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary, .stationary]
         panel.backgroundColor = .clear
         panel.isOpaque = false
         panel.hasShadow = false
         panel.hidesOnDeactivate = false
         panel.animationBehavior = .none
         panel.becomesKeyOnlyIfNeeded = true
-        panel.contentViewController = NSHostingController(
-            rootView: ReminderIslandView(model: model)
-        )
+        panel.contentViewController = NSHostingController(rootView: ReminderIslandView(model: model))
         panel.contentView?.wantsLayer = true
         panel.contentView?.layer?.backgroundColor = NSColor.clear.cgColor
         panel.contentView?.layer?.borderWidth = 0
@@ -197,47 +202,43 @@ final class ReminderIslandController {
 
     private func present(_ reminder: ScheduledReminder) {
         guard let screen = NSScreen.screens.first ?? NSScreen.main else { return }
+
+        hideTask?.cancel()
+        transitionTask?.cancel()
         current = reminder
         isDismissing = false
-        dismissTask?.cancel()
-        dismissTask = nil
+        swipeDistance = 0
         model.reminder = reminder
         model.topInset = max(28, screen.safeAreaInsets.top)
-        model.contentVisible = false
-        model.swipeProgress = 0
-        swipeDistance = 0
+        model.seedCenterY = notchFrame(on: screen).height / 2
+        resetPresentation(keepingReminder: true)
 
-        collapsedFrame = notchFrame(on: screen)
-        // Opening still grows from the physical notch frame. Closing deliberately
-        // ignores that frame and converges to one point at the notch's center.
-        model.collapsedWidth = 1
-        model.collapsedHeight = 1
-        model.collapseCenterY = collapsedFrame.height / 2
-        let finalFrame = expandedFrame(on: screen)
-        expandedFrame = finalFrame
-        panel.setFrame(collapsedFrame, display: true)
+        panel.setFrame(expandedFrame(on: screen), display: true)
         panel.alphaValue = 1
         panel.orderFrontRegardless()
         startSwipeMonitoring()
 
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.46
-            context.timingFunction = CAMediaTimingFunction(
-                controlPoints: 0.2,
-                0.82,
-                0.24,
-                1
-            )
-            context.allowsImplicitAnimation = true
-            panel.animator().setFrame(finalFrame, display: true)
+        // Width leads height slightly, producing an organic stretch rather
+        // than scaling the complete window as a single rigid rectangle.
+        withAnimation(.timingCurve(0.16, 1, 0.3, 1, duration: 0.50)) {
+            model.surfaceWidthProgress = 1
         }
 
-        Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .milliseconds(130))
-            self?.model.contentVisible = true
+        transitionTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .milliseconds(20))
+            guard !Task.isCancelled, let self, self.current?.id == reminder.id else { return }
+            withAnimation(.timingCurve(0.16, 1, 0.3, 1, duration: 0.46)) {
+                self.model.surfaceHeightProgress = 1
+            }
+
+            try? await Task.sleep(for: .milliseconds(120))
+            guard !Task.isCancelled, self.current?.id == reminder.id else { return }
+            withAnimation(.timingCurve(0.2, 0.8, 0.2, 1, duration: 0.24)) {
+                self.model.contentProgress = 1
+            }
+            self.transitionTask = nil
         }
 
-        hideTask?.cancel()
         hideTask = Task { @MainActor [weak self] in
             try? await Task.sleep(for: .seconds(12))
             guard !Task.isCancelled else { return }
@@ -249,68 +250,90 @@ final class ReminderIslandController {
         guard current != nil, !isDismissing else { return }
         isDismissing = true
         hideTask?.cancel()
+        transitionTask?.cancel()
         hideTask = nil
+        transitionTask = nil
         stopSwipeMonitoring()
 
-        let remainingProgress = max(0, 1 - model.swipeProgress)
-        let duration = max(0.14, 0.40 * Double(remainingProgress))
-        withAnimation(.timingCurve(0.22, 0.78, 0.24, 1, duration: duration)) {
-            model.swipeProgress = 1
+        let remainingTravel = max(model.surfaceWidthProgress, model.surfaceHeightProgress)
+        let widthDuration = max(0.18, 0.50 * Double(remainingTravel))
+        let heightDuration = max(0.17, 0.46 * Double(remainingTravel))
+
+        withAnimation(.easeOut(duration: 0.16)) {
+            model.contentProgress = 0
         }
 
-        dismissTask?.cancel()
-        dismissTask = Task { @MainActor [weak self] in
-            try? await Task.sleep(for: .seconds(duration + 0.04))
-            guard !Task.isCancelled, let self else { return }
-            self.panel.orderOut(nil)
-            self.model.contentVisible = false
-            self.model.swipeProgress = 0
-            self.current = nil
-            self.isDismissing = false
-            self.dismissTask = nil
-            if !self.queue.isEmpty {
-                let next = self.queue.removeFirst()
-                self.present(next)
+        transitionTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            try? await Task.sleep(for: .milliseconds(20))
+            guard !Task.isCancelled else { return }
+            withAnimation(.timingCurve(0.4, 0, 0.2, 1, duration: heightDuration)) {
+                self.model.surfaceHeightProgress = 0
             }
+
+            try? await Task.sleep(for: .milliseconds(25))
+            guard !Task.isCancelled else { return }
+            withAnimation(.timingCurve(0.4, 0, 0.2, 1, duration: widthDuration)) {
+                self.model.surfaceWidthProgress = 0
+            }
+
+            try? await Task.sleep(for: .seconds(max(widthDuration, heightDuration) + 0.05))
+            guard !Task.isCancelled else { return }
+            self.finishDismissal()
+        }
+    }
+
+    private func finishDismissal() {
+        panel.orderOut(nil)
+        current = nil
+        isDismissing = false
+        transitionTask = nil
+        resetPresentation()
+
+        if !queue.isEmpty {
+            let next = queue.removeFirst()
+            present(next)
+        }
+    }
+
+    private func resetPresentation(keepingReminder: Bool = false) {
+        model.surfaceWidthProgress = 0
+        model.surfaceHeightProgress = 0
+        model.contentProgress = 0
+        if !keepingReminder {
+            model.reminder = nil
         }
     }
 
     private func expandedFrame(on screen: NSScreen) -> NSRect {
         let minimumWidth = notchFrame(on: screen).width
         let contentWidth = current.map(islandContentWidth(for:)) ?? minimumWidth
-        // Fifteen percent of the widest row on each side gives the content
-        // breathing room while allowing every reminder to size independently.
-        let width = min(
-            max(minimumWidth, ceil(contentWidth * 1.30)),
-            screen.frame.width - 40
+        let width = ReminderIslandLayout.expandedWidth(
+            contentWidth: contentWidth,
+            minimumWidth: minimumWidth,
+            maximumWidth: screen.frame.width - 40
         )
-        let height = max(88, model.topInset + 56)
+        let font = preferredBodyFont()
+        let lineHeight = ceil(font.ascender - font.descender + font.leading)
+        let height = max(62, model.topInset + lineHeight + 17)
         return topCenteredFrame(width: width, height: height, screen: screen)
     }
 
     private func islandContentWidth(for reminder: ScheduledReminder) -> CGFloat {
-        let titleFont = NSFont.systemFont(ofSize: 14, weight: .semibold)
-        let detailFont = NSFont.systemFont(ofSize: 11, weight: .regular)
-        let titleTextWidth = textWidth(reminder.event.title, font: titleFont)
-        let titleRowWidth = 8 + 8 + titleTextWidth
-
-        let detailParts = [
-            reminderRelativeText(reminder),
-            "•",
-            reminder.event.startDate.formatted(date: .omitted, time: .shortened),
-            "•",
-            reminder.event.calendarTitle
-        ]
-        let detailTextWidth = detailParts.reduce(CGFloat.zero) {
-            $0 + textWidth($1, font: detailFont)
-        }
-        let detailRowWidth = detailTextWidth + 4 * 6
-
-        return max(titleRowWidth, detailRowWidth)
+        let font = preferredBodyFont()
+        let textWidths = textWidth(reminder.event.title, font: font)
+            + textWidth("•", font: font)
+            + textWidth(reminderRelativeText(reminder), font: font)
+        // Dot + the three 8pt gaps between the four visible elements.
+        return 8 + textWidths + 3 * 8
     }
 
     private func textWidth(_ text: String, font: NSFont) -> CGFloat {
         ceil((text as NSString).size(withAttributes: [.font: font]).width)
+    }
+
+    private func preferredBodyFont() -> NSFont {
+        NSFont.preferredFont(forTextStyle: .body, options: [:])
     }
 
     private func notchFrame(on screen: NSScreen) -> NSRect {
@@ -360,26 +383,32 @@ final class ReminderIslandController {
 
         guard event.hasPreciseScrollingDeltas else { return }
         if event.phase.contains(.began) {
+            transitionTask?.cancel()
+            transitionTask = nil
             swipeDistance = 0
         }
 
         let physicalDelta = event.scrollingDeltaY * (event.isDirectionInvertedFromDevice ? -1 : 1)
         swipeDistance = max(0, swipeDistance + physicalDelta)
-        let progress = min(1, swipeDistance / 70)
-        model.swipeProgress = progress
+        let progress = min(1, swipeDistance / 74)
+        model.surfaceWidthProgress = 1 - progress
+        model.surfaceHeightProgress = max(0, 1 - progress * 1.08)
+        model.contentProgress = max(0, 1 - progress * 1.8)
 
-        if progress >= 0.72 {
+        if progress >= 0.74 {
             dismiss()
             return
         }
 
         if event.phase.contains(.ended) || event.phase.contains(.cancelled) {
-            if progress >= 0.35 {
+            if progress >= 0.34 {
                 dismiss()
             } else {
                 swipeDistance = 0
-                withAnimation(.easeOut(duration: 0.2)) {
-                    model.swipeProgress = 0
+                withAnimation(.timingCurve(0.16, 1, 0.3, 1, duration: 0.32)) {
+                    model.surfaceWidthProgress = 1
+                    model.surfaceHeightProgress = 1
+                    model.contentProgress = 1
                 }
             }
         }

@@ -1,0 +1,4 @@
+"CFBundleDisplayName" = "CalendarBar";
+"NSCalendarsUsageDescription" = "CalendarBar needs calendar access to show upcoming events in the menu bar.";
+"NSCalendarsFullAccessUsageDescription" = "CalendarBar needs calendar access to show upcoming events in the menu bar.";
+"NSFocusStatusUsageDescription" = "CalendarBar needs Focus status access to pause Reminder Island while Do Not Disturb or another Focus is active.";

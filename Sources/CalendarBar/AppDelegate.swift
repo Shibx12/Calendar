@@ -15,6 +15,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let reminderScheduler = ReminderScheduler()
     private let reminderIsland = ReminderIslandController()
+    private let focusModeMonitor = FocusModeMonitor()
+    private let popoverNavigation = PopoverNavigationModel()
     private let panel = CalendarPanel(
         contentRect: NSRect(x: 0, y: 0, width: AppLayout.popoverWidth, height: 360),
         styleMask: [.borderless, .nonactivatingPanel],
@@ -30,6 +32,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         configureStatusItem()
         configurePanel()
         configureReminders()
+        configureFocusMode()
         observeService()
         service.refresh()
     }
@@ -37,6 +40,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillTerminate(_ notification: Notification) {
         stopEventMonitoring()
         reminderScheduler.stop()
+        focusModeMonitor.stop()
         reminderIsland.dismissImmediately()
         NSStatusBar.system.removeStatusItem(statusItem)
     }
@@ -63,14 +67,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         panel.hidesOnDeactivate = false
         panel.animationBehavior = .none
         panel.becomesKeyOnlyIfNeeded = true
+        applyPanelAppearance(service.preferences.appearance)
         panel.contentViewController = NSHostingController(
             rootView: CalendarPopoverView(
                 service: service,
+                navigation: popoverNavigation,
                 onPreferredHeightChange: { [weak self] height in
                     self?.resizePanel(to: height)
                 },
                 onTestReminder: { [weak self] in
                     self?.showTestReminder()
+                },
+                onOpenEvent: { [weak self] event in
+                    self?.openEventInCalendar(event)
                 }
             )
         )
@@ -87,17 +96,38 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let height = min(requestedHeight, floor(screenHeight / 2))
         let newSize = NSSize(width: AppLayout.popoverWidth, height: height)
         guard panel.contentLayoutRect.size != newSize else { return }
-        panel.setContentSize(newSize)
+
         if panel.isVisible {
-            panel.setFrame(targetPanelFrame(for: panel.frame.size), display: true)
+            // Keep the top and both side edges completely stationary while
+            // only the bottom edge follows content-height changes.
+            let currentFrame = panel.frame
+            let targetFrame = NSRect(
+                x: currentFrame.minX,
+                y: currentFrame.maxY - height,
+                width: currentFrame.width,
+                height: height
+            )
+            NSAnimationContext.runAnimationGroup { context in
+                context.duration = 0.34
+                context.timingFunction = CAMediaTimingFunction(
+                    controlPoints: 0.2,
+                    0.8,
+                    0.2,
+                    1
+                )
+                context.allowsImplicitAnimation = true
+                panel.animator().setFrame(targetFrame, display: true)
+            }
+        } else {
+            panel.setContentSize(newSize)
         }
     }
 
     private func observeService() {
-        service.objectWillChange
+        Publishers.CombineLatest3(service.$access, service.$menuEvents, service.$now)
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                DispatchQueue.main.async { self?.updateStatusItem() }
+                self?.updateStatusItem()
             }
             .store(in: &cancellables)
 
@@ -106,26 +136,70 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 self?.reminderScheduler.update(events: events)
             }
             .store(in: &cancellables)
+
+        service.preferences.$appearance
+            .removeDuplicates()
+            .sink { [weak self] appearance in
+                self?.applyPanelAppearance(appearance)
+            }
+            .store(in: &cancellables)
+
+        service.preferences.$appLanguage
+            .removeDuplicates()
+            .dropFirst()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.updateStatusItem()
+                self?.reminderIsland.dismissImmediately()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func applyPanelAppearance(_ appearance: AppAppearance) {
+        switch appearance {
+        case .system:
+            panel.appearance = nil
+        case .light:
+            panel.appearance = NSAppearance(named: .aqua)
+        case .dark:
+            panel.appearance = NSAppearance(named: .darkAqua)
+        }
     }
 
     private func configureReminders() {
         reminderScheduler.onReminder = { [weak self] reminder in
+            self?.focusModeMonitor.refresh()
+            guard self?.focusModeMonitor.isFocusActive == false else { return }
             self?.reminderIsland.enqueue(reminder)
         }
     }
 
+    private func configureFocusMode() {
+        focusModeMonitor.onFocusChange = { [weak self] isActive in
+            if isActive {
+                self?.reminderIsland.dismissImmediately()
+            }
+        }
+        focusModeMonitor.start()
+    }
+
     private func showTestReminder() {
+        focusModeMonitor.refresh()
+        guard !focusModeMonitor.isFocusActive else {
+            closePanel(animated: false)
+            return
+        }
         let now = Date()
         let nearestEvent = service.weekEvents
             .filter { $0.startDate > now }
             .min { $0.startDate < $1.startDate }
         let event = nearestEvent ?? CalendarEvent(
             id: "calendarbar-preview",
-            title: "CalendarBar 提醒测试",
+            title: L10n.text("preview.title"),
             startDate: now.addingTimeInterval(10 * 60),
             endDate: now.addingTimeInterval(40 * 60),
             calendarID: "calendarbar-preview",
-            calendarTitle: "测试",
+            calendarTitle: L10n.text("preview.calendar"),
             calendarColor: .systemBlue
         )
 
@@ -133,11 +207,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         reminderIsland.enqueue(ScheduledReminder(event: event, fireDate: now))
     }
 
+    private func openEventInCalendar(_ event: CalendarEvent) {
+        closePanel(animated: false)
+        if let url = AppleCalendarLink.eventURL(for: event), NSWorkspace.shared.open(url) {
+            return
+        }
+        if let fallbackURL = AppleCalendarLink.dayURL(for: event) {
+            NSWorkspace.shared.open(fallbackURL)
+        }
+    }
+
     private func updateStatusItem() {
         guard let button = statusItem.button else { return }
         let text = service.statusText
         button.title = text
-        button.toolTip = text == "Free" ? "未来 \(service.preferences.lookAheadHours) 小时没有日程" : text
+        button.toolTip = service.menuEvents.isEmpty && service.access == .granted
+            ? L10n.format(
+                "status.free_tooltip",
+                Int64(service.preferences.lookAheadHours)
+            )
+            : text
         statusItem.length = NSStatusItem.variableLength
     }
 
@@ -151,7 +240,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if panel.isVisible {
             closePanel()
         } else {
-            service.refresh()
+            // A new presentation always starts on the calendar page. Reset
+            // while hidden so there is no visible settings-to-calendar flash.
+            popoverNavigation.resetToCalendar()
+            service.refreshIfStale()
             DispatchQueue.main.async { [weak self] in
                 self?.presentPanel()
             }
@@ -181,8 +273,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         stopEventMonitoring()
 
         guard animated else {
-            panel.orderOut(nil)
-            panel.alphaValue = 1
+            finishHidingPanel()
             return
         }
 
@@ -194,10 +285,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             panel.animator().setFrame(endFrame, display: true)
         } completionHandler: { [weak self] in
             Task { @MainActor in
-                self?.panel.orderOut(nil)
-                self?.panel.alphaValue = 1
+                self?.finishHidingPanel()
             }
         }
+    }
+
+    private func finishHidingPanel() {
+        panel.orderOut(nil)
+        panel.alphaValue = 1
+
+        // Reset after the panel is fully hidden. SwiftUI then reports the
+        // calendar page's shorter preferred height while NSPanel is offscreen,
+        // so the next presentation starts at its final size.
+        popoverNavigation.resetToCalendar()
     }
 
     private func targetPanelFrame(for size: NSSize) -> NSRect {
@@ -256,11 +356,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     private func showContextMenu(from button: NSStatusBarButton) {
         let menu = NSMenu()
-        let refresh = NSMenuItem(title: "刷新日历", action: #selector(refreshCalendar), keyEquivalent: "r")
+        let refresh = NSMenuItem(
+            title: L10n.text("action.refresh_calendar"),
+            action: #selector(refreshCalendar),
+            keyEquivalent: "r"
+        )
         refresh.target = self
         menu.addItem(refresh)
         menu.addItem(.separator())
-        let quit = NSMenuItem(title: "退出 CalendarBar", action: #selector(quitApp), keyEquivalent: "q")
+        let quit = NSMenuItem(
+            title: L10n.text("action.quit"),
+            action: #selector(quitApp),
+            keyEquivalent: "q"
+        )
         quit.target = self
         menu.addItem(quit)
         statusItem.menu = menu

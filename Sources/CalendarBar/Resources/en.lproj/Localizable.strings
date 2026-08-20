@@ -1,0 +1,62 @@
+"permission.title" = "Put your events in the menu bar";
+"permission.detail" = "CalendarBar reads only the calendars you choose on this Mac and never uploads your data.";
+"permission.allow" = "Allow Calendar Access";
+"permission.denied_title" = "Calendar access is turned off";
+"permission.denied_detail" = "Allow CalendarBar in System Settings → Privacy & Security → Calendars.";
+"permission.open_settings" = "Open System Settings";
+
+"action.refresh_calendar" = "Refresh Calendars";
+"action.settings" = "Settings";
+"action.quit" = "Quit CalendarBar";
+"action.open_in_calendar" = "Open in Apple Calendar";
+
+"navigation.page_control" = "Page selector";
+"navigation.calendar_page" = "Calendar page";
+"navigation.settings_page" = "Settings page";
+"navigation.swipe_hint" = "Swipe horizontally to switch pages";
+
+"day.today" = "Today";
+"day.tomorrow" = "Tomorrow";
+"event.all_day" = "All day";
+"event.untitled" = "Untitled Event";
+"event.active_suffix" = ", in progress";
+"event.location_suffix" = ", location %@";
+"event.accessibility_format" = "%1$@%2$@, %3$@%4$@";
+
+"settings.test_reminder" = "Test Reminder Island";
+"settings.calendars" = "Calendars";
+"settings.select_all" = "Select All";
+"settings.selected" = "Selected";
+"settings.not_selected" = "Not selected";
+"settings.display" = "Display";
+"settings.appearance" = "Appearance";
+"settings.language" = "Language";
+"settings.future_event_range" = "Future event range";
+"settings.hours" = "hours";
+"settings.show_next_event" = "Show next event";
+"settings.show_current_event" = "Show current event";
+"settings.system" = "System";
+"settings.launch_at_login" = "Launch at login";
+
+"appearance.system" = "Follow System";
+"appearance.light" = "Light";
+"appearance.dark" = "Dark";
+
+"language.system" = "Follow System";
+"language.english" = "English";
+"language.simplified_chinese" = "简体中文";
+
+"status.calendar_access" = "Calendar access";
+"status.free" = "Free";
+"status.free_tooltip" = "No events in the next %lld hours";
+
+"duration.now" = "now";
+"duration.minutes" = "%lldm";
+"duration.hours" = "%lldh";
+"duration.hours_minutes" = "%1$lldh %2$lldm";
+"event.remaining_format" = "%1$@ %2$@ left";
+"event.upcoming_format" = "%1$@ in %2$@";
+"reminder.remaining_format" = "%@ left";
+
+"preview.title" = "CalendarBar Reminder Test";
+"preview.calendar" = "Test";
